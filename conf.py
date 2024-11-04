@@ -49,7 +49,39 @@ configuration={
       "pin": 3,    
       "config": {
         "initial_state":0,  
-        "auto_off_time": 4000
+        "auto_off_time": 4000,
+        "actions": [
+          {
+            "type": "on",
+            "target": "Red1",
+            "condition":"value==0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "led",
+      "name": "Red1",
+      "pin": 4,    
+      "config": {
+        "initial_state":0,  
+        "auto_off_time": 8000,
+        "actions": [
+          {
+            "type": "on",
+            "target": "Red2",
+            "condition":"value==0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "led",
+      "name": "Red2",
+      "pin": 5,    
+      "config": {
+        "initial_state":0,  
+        "auto_off_time": 16000
       }
     },
     {

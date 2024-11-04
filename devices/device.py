@@ -35,6 +35,10 @@ class Device():
                 if action["target"]==self.name:
                     logger.error(f"Circular reference in action {action}")
                     continue
+                
+                if action["target"] not in self.dev_ht:
+                    logger.error(f"Unknown target {action['target']}")
+                
                 if action["type"]=="toggle":
                     self.dev_ht[action["target"]].toggle()
                 elif action["type"]=="on":
