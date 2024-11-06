@@ -7,6 +7,7 @@ from devices.servo import Servo
 from devices.led import Led
 from devices.ultrasonic import UltraSonic
 from devices.sound import Sound
+from devices.accelerometer import Accelerometer
 
 
 import micropython
@@ -42,7 +43,9 @@ for device in configuration["devices"]:
     elif device["type"]=="ultrasonic":
         devices_ht[device["name"]]=UltraSonic(devices_ht,device["name"],device["pin"],device.get("config",{}))        
     elif device["type"]=="sound":
-        devices_ht[device["name"]]=Sound(devices_ht,device["name"],device["pin"],device.get("config",{}))        
+        devices_ht[device["name"]]=Sound(devices_ht,device["name"],device["pin"],device.get("config",{}))
+    elif device["type"]=="accelerometer":
+        devices_ht[device["name"]]=Accelerometer(devices_ht,device["name"],device["pin"],device.get("config",{}))                
     else:
         logger.error(f'Unknown type <{device["type"]}>')
     
