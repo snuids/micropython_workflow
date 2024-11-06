@@ -19,9 +19,7 @@ class Logger:
         print(*args)
         
     def error(self, *args):
-        print(*(("[ERROR]:",)
         print(*(("[ERROR]:",)+self.get_time_tuple()+args))
-        print(*(("[ERROR]:",)
         
     def info(self, *args):
         print(*(("[INFO ]:",)+self.get_time_tuple()+args))

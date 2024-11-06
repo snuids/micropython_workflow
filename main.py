@@ -14,7 +14,7 @@ import micropython
 micropython.alloc_emergency_exception_buf(100)
 
 logger=get_logger()
-logger.set_level("INFO")
+logger.set_level("DEBUG")
 devices_ht={}
 
 logger.debug(configuration)

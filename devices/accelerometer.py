@@ -20,8 +20,8 @@ class Accelerometer(Device):
         super().__init__(dev_ht,name, pin,config)
         self.actions=self.config.get("actions",[])
         self.nextupdate=ticks_ms()+100
-        
-        self.i2c = I2C(0, sda=Pin(pin), scl=Pin(pin+1), freq=400000)
+        self.sda=Pin(pin)
+        self.i2c = I2C(0, sda=self.sda, scl=Pin(pin+1), freq=400000)
         self.i2c.writeto_mem(ADXL345_ADDRESS, ADXL345_POWER_CTL, bytearray([0x08]))  # Set bit 3 to 1 to enable measurement mode
         self.i2c.writeto_mem(ADXL345_ADDRESS, ADXL345_DATA_FORMAT, bytearray([0x0B]))  # Set data format to full resolution, +/- 16g
         self.poll_speed=500
@@ -46,7 +46,7 @@ class Accelerometer(Device):
 
             logger.debug("X: {}, Y: {}, Z: {}, Magnitude: {:.2f}, Roll: {:.2f}, Pitch: {:.2f}".format(x, y, z, self.magnitude, self.roll, self.pitch))
             
-#            self.callback(self.trigger)
+            self.callback(self.sda)
         except Exception as e:
             logger.error("Unable to compute acceleration")
             logger.error(e)

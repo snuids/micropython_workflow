@@ -20,9 +20,11 @@ class Device():
         pass
 
     def resolve_formula(self,formula):
-        formula=formula.replace("value",str(self.value))
-        for param in self.parameters:
-            formula=formula.replace(param,str(getattr(self,param)))
+        if len(self.parameters)==0:
+            formula=formula.replace("value",str(self.value))
+        else:
+            for param in self.parameters:
+                formula=formula.replace(param,str(getattr(self,param)))
         return formula
             
             
@@ -63,10 +65,12 @@ class Device():
                     self.dev_ht[action["target"]].suspended=False
                 elif action["type"]=="suspend_toggle":
                     self.dev_ht[action["target"]].suspended=not self.dev_ht[action["target"]].suspended
-                elif action["type"]=="set_value":
-                    newvalue=self.value
+                elif action["type"]=="set_value":                    
                     if "formula" in action:
                         newvalue=eval(self.resolve_formula(action["formula"]))
+                    else:
+                        newvalue=self.value
+                    print(newvalue)
                     self.dev_ht[action["target"]].set_value(newvalue)
                     
  

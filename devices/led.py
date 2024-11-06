@@ -53,7 +53,7 @@ class Led(Device):
         self.value=value
         if value!=self.pin.value():
             self.callback(self.pin)
-            
+        print(value)
         if value==1:
             self.last_on_ask=ticks_ms()
         self.pin.value(value)
