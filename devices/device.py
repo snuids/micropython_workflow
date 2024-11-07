@@ -15,6 +15,7 @@ class Device():
         self.suspended=False
         self.actions=self.config.get("actions",[])
         self.parameters=[]
+        self.expander=None
         
     def run(self):
         pass

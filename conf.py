@@ -1,119 +1,84 @@
 configuration={
   "devices": [
     {
-      "type": "led",
-      "name": "Left",
-      "pin": 0,
-      "config": {
-        "initial_state":1,
-        "auto_off_time": 3000
-      }
-    },
-    {
-      "type": "led",
-      "name": "Center",
-      "pin": 1,
-      "config": {
-        "initial_state":1,
-        "auto_off_time": 3000
-      }
-    },
-    {
-      "type": "led",
-      "name": "Right",
-      "pin": 2,
-      "config": {
-        "initial_state":1,
-        "auto_off_time": 3000
-      }
-    },
-    {
-      "type": "switch",
-      "name": "SwitchGreen",
+      "type": "textpanel",
+      "name": "Text",
       "pin": 10,
       "config": {
-        "actions": [
-          {
-            "type": "on",
-            "target": "Left"
-          }
-          ,{
-            "type": "off",
-            "target": "Center"
-          },
-          {
-            "type": "off",
-            "target": "Right"
-          }
-        ]
+          "i2c_addr" : 0x27,
+          "i2c_num_rows" : 2,
+          "i2c_num_cols" : 16
       }
     }
-    ,    
+    ,
     {
-      "type": "switch",
-      "name": "SwitchYellow",
-      "pin": 11,
-      "config": {
-        "actions": [
-          {
-            "type": "off",
-            "target": "Left"
-          }
-          ,{
-            "type": "on",
-            "target": "Center"
-          },
-          {
-            "type": "off",
-            "target": "Right"
-          }
-        ]
-      }
+       "type":"pinexpander",
+       "name": "exp1",
+       "pin":8,
+       "config": {
+          "i2c_addr" : 0x20
+      }                 
     }
-    ,    
+    ,
     {
-      "type": "switch",
-      "name": "SwitchRed",
-      "pin": 12,
-      "config": {
-        "actions": [
-          {
-            "type": "off",
-            "target": "Left"
-          }
-          ,{
-            "type": "off",
-            "target": "Center"
-          },
-          {
-            "type": "on",
-            "target": "Right"
-          }        ]
-      }     
+       "type":"led",
+       "name": "led1",
+       "pin":1,
+       "config": {
+            "expander":"exp1",
+            "mode": "blink",
+            "blink_speed": 500,
+
+      }                 
     }
-    ,    
+    ,
     {
-      "type": "switch",
-      "name": "SwitchRed",
-      "pin": 13,
-      "config": {
-        "actions": [
-          {
-            "type": "on",
-            "target": "Left"
-          }
-          ,{
-            "type": "on",
-            "target": "Center"
-          },
-          {
-            "type": "on",
-            "target": "Right"
-          }        ]
-      }     
+       "type":"led",
+       "name": "led2",
+       "pin":2,
+       "config": {
+            "expander":"exp1",
+            "mode": "blink",
+            "blink_speed": 1000,
+
+      }                 
+    }
+    ,
+    {
+       "type":"led",
+       "name": "led3",
+       "pin":3,
+       "config": {
+            "expander":"exp1",
+            "mode": "blink",
+            "blink_speed": 2000,
+
+      }                 
+    }
+    ,
+    {
+       "type":"led",
+       "name": "led4",
+       "pin":4,
+       "config": {
+            "expander":"exp1",
+            "mode": "blink",
+            "blink_speed": 3000,
+
+      }                 
+    }
+    ,
+    {
+       "type":"led",
+       "name": "led5",
+       "pin":5,
+       "config": {
+            "expander":"exp1",
+            "mode": "blink",
+            "blink_speed": 4000,
+
+      }                 
     }
   ]
 }
-
-
 

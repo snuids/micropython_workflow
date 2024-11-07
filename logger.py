@@ -19,10 +19,10 @@ class Logger:
         print(*args)
         
     def error(self, *args):
-        print(*(("[ERROR]:",)+self.get_time_tuple()+args))
+        print(*(("\033[91m[ERROR]\033[0m:",)+self.get_time_tuple()+args))
         
     def info(self, *args):
-        print(*(("[INFO ]:",)+self.get_time_tuple()+args))
+        print(*(("\033[92m[INFO ]\033[0m:",)+self.get_time_tuple()+args))
         
     def debug(self, *args):
         if self.level=="DEBUG":

@@ -12,8 +12,11 @@ class Led(Device):
             
         self.initial_state=config.get("initial_state",1)
         self.value=self.initial_state
-        self.pin=Pin(pin,Pin.OUT)
-        self.pin.value(self.initial_state)
+        if "expander" not in self.config:
+            self.pin=Pin(pin,Pin.OUT)
+            self.pin.value(self.initial_state)
+        else:
+            logger.info("Led {name} use expansion")
         self.mode=config.get("mode","solid")
         self.blink_speed=config.get("blink_speed",1000)
         self.blink_off_speed=config.get("blink_off_speed",self.blink_speed)
