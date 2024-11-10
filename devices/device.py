@@ -32,10 +32,10 @@ class Device():
 
     def callback(self,pin):
 
+        
         if ticks_ms()>self.next_callback:
-            
             self.next_callback=ticks_ms()+self.debounce_delay
-            for action in self.actions:
+            for action in self.actions:                
                 logger.debug(f"Execute {action}")
                 if "condition" in action:
                     cond=eval(self.resolve_formula(action["condition"]))
@@ -51,7 +51,7 @@ class Device():
                 
                 if action["target"] not in self.dev_ht:
                     logger.error(f"Unknown target {action['target']}")
-                
+
                 if action["type"]=="toggle":
                     self.dev_ht[action["target"]].toggle()
                 elif action["type"]=="on":

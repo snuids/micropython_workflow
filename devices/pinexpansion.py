@@ -18,7 +18,12 @@ class PinExpander(Device):
         self.poll_speed=1000
         self.nextupdate=ticks_ms()+self.poll_speed
         self.count=0
-        self.pcf.check()
-        self.initialized=True
+        self.initialized=False        
+        try:
+            self.pcf.check()
+            self.initialized=True
+        except Exception as e:
+            logger.error(f"Unable to init expansion {self}")
+
         
     

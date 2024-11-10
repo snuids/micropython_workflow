@@ -9,6 +9,7 @@ from devices.ultrasonic import UltraSonic
 from devices.sound import Sound
 from devices.accelerometer import Accelerometer
 from devices.textpanel import TextPanel
+from devices.graphpanel import GraphPanel
 from devices.pinexpansion import PinExpander
 from debug.scani2c import scan_i2c
 
@@ -22,6 +23,7 @@ devices_ht={}
 logger.debug(configuration)
 
 #scan_i2c(8,9)
+scan_i2c(10,11)
 
 # check config
 pin_ht={}
@@ -56,6 +58,8 @@ for device in configuration["devices"]:
         devices_ht[device["name"]]=TextPanel(devices_ht,device["name"],device["pin"],device.get("config",{}))                
     elif device["type"]=="pinexpander":
         devices_ht[device["name"]]=PinExpander(devices_ht,device["name"],device["pin"],device.get("config",{}))                
+    elif device["type"]=="graphpanel":
+        devices_ht[device["name"]]=GraphPanel(devices_ht,device["name"],device["pin"],device.get("config",{}))                
     else:
         logger.error(f'Unknown type <{device["type"]}>')
     
