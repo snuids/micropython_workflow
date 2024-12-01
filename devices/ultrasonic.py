@@ -16,6 +16,9 @@ class UltraSonic(Device):
         self.nextupdate=ticks_ms()+self.poll_speed
         self.value=0
         
+    def reset(self):
+        self.nextupdate=ticks_ms()-1        
+        
     def run(self):
         if ticks_ms()<self.nextupdate:
            return
@@ -40,6 +43,7 @@ class UltraSonic(Device):
             distance = (timepassed * 0.0343) / 2
             self.value=int(distance)
             logger.debug(f"Distance {distance} cm")
+#            print(self.trigger)
             self.callback(self.trigger)
         except Exception as e:
             logger.error("Unable to compute distance")

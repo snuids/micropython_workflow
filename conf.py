@@ -1,29 +1,44 @@
 configuration={
   "devices": [
-      {
-      "type": "led",
-      "name": "Yellow1",
-      "pin": 1,
+    
+    {
+      "type": "servo",
+      "name": "Servo1",
+      "pin": 14,
       "config": {
-        "mode": "blink",
-        "blink_speed": 500,
-        "blink_off_speed": 1000,
+        "mode": "fixed"
+      }
+    }
+    ,
+    {
+      "type": "servo",
+      "name": "Servo2",
+      "pin": 15,
+      "config": {
+        "mode": "fixed"
       }
     },
-      {
-      "type": "switch",
-      "name": "TapButton",
-      "pin": 0
-    }
     {
-      "type": "graphpanel",
-      "name": "OLED",
+      "type": "tof",
+      "name": "TimeOfFlight",
       "pin": 4,
       "config": {
-          "i2c_addr" : 0x3c
       }
+      
+    }
+    ,
+    {
+      "type": "ultrasonic",
+      "name": "Sonic",
+      "pin": 0,
+      "config": {
+        "actions": [
+          
+          
+
+        ]
+      }      
     }
     
-  ]
+    ]
 }
-

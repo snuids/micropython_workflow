@@ -16,7 +16,10 @@ class Device():
         self.actions=self.config.get("actions",[])
         self.parameters=[]
         self.expander=None
-        
+    
+    def reset(self):
+        self.nextupdate=ticks_ms()-1    
+    
     def run(self):
         pass
 
@@ -32,8 +35,8 @@ class Device():
 
     def callback(self,pin):
 
-        
-        if ticks_ms()>self.next_callback:
+        logger.debug(f"Callback {self}")
+        if ticks_ms()>self.next_callback or self.__class__.__name__!="UltraSonic":
             self.next_callback=ticks_ms()+self.debounce_delay
             for action in self.actions:                
                 logger.debug(f"Execute {action}")

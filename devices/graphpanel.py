@@ -56,9 +56,11 @@ class GraphPanel(Device):
             
             for value in self.values:
                 x=int((ticks_ms()-value)/50)
+                if x>128:
+                    continue
                 x2=int((ticks_ms()-value)/100)
-                self.oled.framebuf.line(x,0,x,64,1)
-                self.oled.framebuf.line(0,x2,128,x2,1)
+                self.oled.framebuf.line(x,0,int(x**(3/2)),64,1)
+                self.oled.framebuf.line(0,int(x2**(3/2)),128,x2,1)
                 
             
             if len(self.values)>1:
