@@ -12,16 +12,17 @@ from devices.textpanel import TextPanel
 from devices.graphpanel import GraphPanel
 from devices.pinexpansion import PinExpander
 from devices.tof import TimeOfFlight
+from devices.rfid import RFID
 from debug.scani2c import scan_i2c
 
 import micropython
 micropython.alloc_emergency_exception_buf(100)
 
 logger=get_logger()
-logger.set_level("INFO")
+logger.set_level("DEBUG")
 
 CUBE=False
-LIDAR=True
+LIDAR=False
 
 if CUBE:
     logger.info("CUBE CONFIG")
@@ -34,7 +35,7 @@ devices_ht={}
 logger.debug(configuration)
 
 #scan_i2c(8,9)
-scan_i2c(4,5)
+#scan_i2c(4,5)
 
 # check config
 pin_ht={}
@@ -73,6 +74,8 @@ for device in configuration["devices"]:
         devices_ht[device["name"]]=GraphPanel(devices_ht,device["name"],device["pin"],device.get("config",{}))                
     elif device["type"]=="tof":
         devices_ht[device["name"]]=TimeOfFlight(devices_ht,device["name"],device["pin"],device.get("config",{}))                
+    elif device["type"]=="rfid":
+        devices_ht[device["name"]]=RFID(devices_ht,device["name"],device["pin"],device.get("config",{}))                
     else:
         logger.error(f'Unknown type <{device["type"]}>')
     
