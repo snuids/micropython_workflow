@@ -10,6 +10,7 @@ class Device():
         self.name = name
         self.config=config
         self.dev_ht=dev_ht
+        self.poll_speed=config.get("poll_speed",5000)
         self.debounce_delay=100
         self.next_callback=ticks_ms()+self.debounce_delay
         self.suspended=False
@@ -74,10 +75,12 @@ class Device():
                         newvalue=eval(self.resolve_formula(action["formula"]))
                     else:
                         newvalue=self.value
-                    print(newvalue)
                     self.dev_ht[action["target"]].set_value(newvalue)
                     
  
                     
         else:
             logger.debug(f"Debounce {self.name}")
+            
+    def __str__(self):
+        return f"Device [{self.name}] Class [{self.__class__.__name__}] Pin [{self.pin_number}]"

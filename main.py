@@ -11,15 +11,33 @@ from devices.accelerometer import Accelerometer
 from devices.textpanel import TextPanel
 from devices.graphpanel import GraphPanel
 from devices.pinexpansion import PinExpander
+from devices.voltagereader import *
 from devices.tof import TimeOfFlight
 from devices.rfid import RFID
+from devices.battery import Battery
 from debug.scani2c import scan_i2c
 
-import micropython
-micropython.alloc_emergency_exception_buf(100)
+#import micropython
+#micropython.alloc_emergency_exception_buf(100)
+
+import devices
+device_classes={}
+for name, obj in globals().items():
+    if isinstance(obj, type) and issubclass(obj, Device):
+#        print(obj.__name__)
+        device_classes[obj.__name__.lower()]=obj
+#        print(obj)
+
+#print(device_classes)
 
 logger=get_logger()
 logger.set_level("DEBUG")
+
+from wifi import wifi_secret
+from drivers.wifi import initialize_wifi
+
+#if not initialize_wifi(wifi_secret["ssid"], wifi_secret["pass"]):
+#    logger.error('Error connecting to the network... exiting program')
 
 CUBE=False
 LIDAR=False
@@ -54,28 +72,8 @@ for device in configuration["devices"]:
 # instantiate devices
 for device in configuration["devices"]:
     logger.debug(device)
-    if device["type"]=="led":
-        devices_ht[device["name"]]=Led(devices_ht,device["name"],device["pin"],device.get("config",{}))
-    elif device["type"]=="switch":
-        devices_ht[device["name"]]=Switch(devices_ht,device["name"],device["pin"],device.get("config",{}))        
-    elif device["type"]=="servo":
-        devices_ht[device["name"]]=Servo(devices_ht,device["name"],device["pin"],device.get("config",{}))        
-    elif device["type"]=="ultrasonic":
-        devices_ht[device["name"]]=UltraSonic(devices_ht,device["name"],device["pin"],device.get("config",{}))        
-    elif device["type"]=="sound":
-        devices_ht[device["name"]]=Sound(devices_ht,device["name"],device["pin"],device.get("config",{}))
-    elif device["type"]=="accelerometer":
-        devices_ht[device["name"]]=Accelerometer(devices_ht,device["name"],device["pin"],device.get("config",{}))                
-    elif device["type"]=="textpanel":
-        devices_ht[device["name"]]=TextPanel(devices_ht,device["name"],device["pin"],device.get("config",{}))                
-    elif device["type"]=="pinexpander":
-        devices_ht[device["name"]]=PinExpander(devices_ht,device["name"],device["pin"],device.get("config",{}))                
-    elif device["type"]=="graphpanel":
-        devices_ht[device["name"]]=GraphPanel(devices_ht,device["name"],device["pin"],device.get("config",{}))                
-    elif device["type"]=="tof":
-        devices_ht[device["name"]]=TimeOfFlight(devices_ht,device["name"],device["pin"],device.get("config",{}))                
-    elif device["type"]=="rfid":
-        devices_ht[device["name"]]=RFID(devices_ht,device["name"],device["pin"],device.get("config",{}))                
+    if device["type"] in device_classes:
+        devices_ht[device["name"]]=device_classes[device["type"]](devices_ht,device["name"],device["pin"],device.get("config",{}))               
     else:
         logger.error(f'Unknown type <{device["type"]}>')
     

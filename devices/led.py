@@ -76,3 +76,21 @@ class Led(Device):
             if value==1:
                 self.last_on_ask=ticks_ms()
             self.pin.value(value)
+            
+    def set_on(self):
+        self.mode="solid"
+        self.set_value(1)
+        
+    def set_off(self):
+        self.mode="solid"
+        self.set_value(0)
+
+    def set_blink(self):
+        if self.mode!="blink":
+            self.mode="blink"
+            self.blink_speed=200
+            self.blink_off_speed=600
+            self.nextupdate=ticks_ms()-100
+
+        
+        
