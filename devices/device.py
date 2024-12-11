@@ -1,3 +1,4 @@
+import json
 from logger import get_logger
 from utime import sleep,ticks_ms
 
@@ -6,6 +7,7 @@ logger=get_logger()
 class Device():
     def __init__(self, dev_ht,name, pin,config):
         logger.debug(f"Create Device <{name}> Pin <{pin}>")
+        self.value=-1
         self.pin_number=pin
         self.name = name
         self.config=config
@@ -84,3 +86,11 @@ class Device():
             
     def __str__(self):
         return f"Device [{self.name}] Class [{self.__class__.__name__}] Pin [{self.pin_number}]"
+    
+    def toDict(self):
+        return {
+            "name":self.name,
+            "class":self.__class__.__name__,
+            "pin":self.pin_number,
+            "value":self.value
+            }

@@ -10,6 +10,8 @@ class Switch(Device):
         logger.debug(f"Create Switch <{name}> Pin <{pin}>")
         super().__init__(dev_ht,name, pin,config)
         self.pin=Pin(pin, Pin.IN, pull=Pin.PULL_UP)
+        self.value=1
+
 #        self.pin=Pin(pin, Pin.IN, pull=Pin.PULL_DOWN)        
 #        self.pin.irq(trigger=Pin.IRQ_FALLING | Pin.IRQ_RISING, handler=self.callback)
         self.pin.irq(trigger=Pin.IRQ_FALLING, handler=self.callback)

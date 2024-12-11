@@ -1,3 +1,4 @@
+import json
 from machine import Pin, Timer
 from conf import configuration
 from utime import sleep,ticks_ms
@@ -32,12 +33,39 @@ for name, obj in globals().items():
 
 logger=get_logger()
 logger.set_level("DEBUG")
+mqtt_client=None
 
-from wifi import wifi_secret
-from drivers.wifi import initialize_wifi
+mqtt_count=0
 
-#if not initialize_wifi(wifi_secret["ssid"], wifi_secret["pass"]):
-#    logger.error('Error connecting to the network... exiting program')
+if True:
+    
+    def mqtt_callback(topic, message,retained):
+        global mqtt_count
+        # Perform desired actions based on the subscribed topic and response
+        logger.info('Received message on topic:', topic)
+        logger.info('Retained:', retained)
+        logger.info('Response:', message)
+        if retained==1:
+            return
+        # Check the content of the received message
+        devices_ht["Test"].set_value(1)
+        devices_ht["ServoOpen"].set_value(150)
+        bat=devices_ht["Battery"]
+        bat.blink()
+
+        
+
+    from wifi import wifi_secret,mqtt_secret
+    from drivers.wifi import initialize_wifi,connect_mqtt
+    import random,time
+
+    if not initialize_wifi(wifi_secret["ssid"], wifi_secret["pass"]):
+        logger.error('Error connecting to the network... exiting program')
+        
+    mqtt_client=connect_mqtt(f"PICO{ time.time()}",mqtt_secret["host"],port=mqtt_secret["port"]
+                             ,user=mqtt_secret["user"],password=mqtt_secret["password"])
+    mqtt_client.set_callback(mqtt_callback)
+    mqtt_client.subscribe("STASSART")
 
 CUBE=False
 LIDAR=False
@@ -100,11 +128,25 @@ if LIDAR:
     from lidar import run_lidar
     run_lidar(devices_ht,led_onboard)
 
+
+last_mqtt=ticks_ms()
 while True:
     sleep(0.1)
     led_onboard.toggle()
     for name,device in devices_ht.items():
         device.run()
+        if mqtt_client:
+            mqtt_client.check_msg()
+            if last_mqtt+20000<ticks_ms():
+
+                devs=[]
+                for key,dev in devices_ht.items():
+                    devs.append(dev.toDict())    
+                
+                mqtt_client.publish("PICO_STATUS",f'a={json.dumps(devs)}')
+                mqtt_count+=1
+                last_mqtt=ticks_ms()
+            
         
     
     

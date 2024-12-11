@@ -12,6 +12,8 @@ class Battery(Device):
         logger.debug(f"Create Battery <{name}> Pin <{pin}>")
         super().__init__(dev_ht,name, pin,config)
         self.nextupdate=ticks_ms()+100
+        self.last_change=ticks_ms()
+
         
         self.leds=[]
         
@@ -21,12 +23,14 @@ class Battery(Device):
             dev_ht[led.name]=led
             
     def set_value(self,value):
-        
-        if value>3.5:
+        self.last_change=ticks_ms()
+#        value=3.15
+        self.value=value
+        if value>3.2:
             self.leds[0].set_on()
             self.leds[1].set_on()
             self.leds[2].set_on()
-        elif value>3.2:
+        elif value>3.1:
             self.leds[0].set_blink()
             self.leds[1].set_on()
             self.leds[2].set_on()
@@ -43,9 +47,23 @@ class Battery(Device):
             self.leds[1].set_off()
             self.leds[2].set_on()
         else:
+            A/0
             self.leds[0].set_off()
             self.leds[1].set_off()
-            self.leds[2].set_blink()                                                                        
+            self.leds[2].set_blink()
+            
+    def blink(self):
+        self.last_change=ticks_ms()+3000
+        for i in range(0,3):
+            self.leds[i].set_blink()
+            
+    def run(self):
+        if self.last_change+5000<ticks_ms() and self.leds[0].value==1:
+            for i in range(0,3):
+                logger.debug("Reset Battery")
+                self.leds[i].set_off()
+                
+            
         
             
     

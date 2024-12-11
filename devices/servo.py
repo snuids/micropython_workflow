@@ -24,7 +24,11 @@ class Servo(Device):
         super().__init__(dev_ht,name, pin,config)
         self.mode=self.config.get("mode","fixed")
         self.__initialise(pin)
+        self.initial_state=self.config.get("initial_state",0)
+        self.move(self.initial_state)
+        self.return_to_intial_delay=self.config.get("return_to_intial_delay",0)
         self.change_delay=self.config.get("change_delay",1000)
+        self.last_change=ticks_ms()
         self.nextupdate=ticks_ms()+self.change_delay
 
 
@@ -43,6 +47,8 @@ class Servo(Device):
         # do we need to move?
         if angle == self.current_angle:
             return
+        logger.debug(f"Set Angle To:{angle}")
+        self.last_change=ticks_ms()
         self.current_angle = angle
         # calculate the new duty cycle and move the motor
         duty_u16 = self.__angle_to_u16_duty(angle)
@@ -70,6 +76,8 @@ class Servo(Device):
             newangle=self.config["sequence"][self.curseq]
             logger.debug(f"Servo <{self.name}> Set new angle <{newangle}>")
             self.move(newangle)
+        elif self.mode=="set_value":
+            self.move(newangle)
         else:
             logger.error(f"Unknown mode <{self.mode}>")
 
@@ -83,6 +91,9 @@ class Servo(Device):
                 newangle=randint(0,180)
                 logger.debug(f"Servo <{self.name}> Set new angle <{newangle}>")
                 self.move(newangle)
+        if self.return_to_intial_delay>0 and self.last_change+(self.return_to_intial_delay*1000)<ticks_ms() and self.current_angle!=self.initial_state:
+            logger.info(f"{self} Return to inital state")
+            self.move(self.initial_state)
 
     def set_value(self,value):
         self.move(value)

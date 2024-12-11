@@ -31,7 +31,7 @@ class Led(Device):
     def run(self):
         if self.mode=="blink":
             if ticks_ms()>self.nextupdate:
-                logger.debug(f"Must blink {self.name}")
+#                logger.debug(f"Must blink {self.name}")
                 if self.value==0:
                     self.value=1
                 else:
@@ -78,15 +78,20 @@ class Led(Device):
             self.pin.value(value)
             
     def set_on(self):
+        logger.debug(f"Set on {self}")
         self.mode="solid"
         self.set_value(1)
         
-    def set_off(self):
+    def set_off(self):        
         self.mode="solid"
+        if self.value==0:
+            return
         self.set_value(0)
+        logger.debug(f"Set off {self}")
 
     def set_blink(self):
         if self.mode!="blink":
+            logger.debug(f"Set blink {self}")            
             self.mode="blink"
             self.blink_speed=200
             self.blink_off_speed=600
