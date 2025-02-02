@@ -24,7 +24,6 @@ class Battery(Device):
             
     def set_value(self,value):
         self.last_change=ticks_ms()
-#        value=3.15
         self.value=value
         if value>3.2:
             self.leds[0].set_on()

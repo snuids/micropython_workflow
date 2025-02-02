@@ -46,7 +46,7 @@ class TextPanel(Device):
             A = gc.mem_alloc()
             T = F+A
             P='{0:.2f}%'.format(F/T*100)
-            mem= ('Total:{0} Free:{1} ({2})'.format(T,F,P))
+            mem= ('Total:{0} Free:{1} ({2})\r\n0123456789'.format(T,F,P))
             self.lcd.putstr(P)                
         except Exception as e:
             logger.error("Unable to set lcd")

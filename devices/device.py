@@ -13,7 +13,7 @@ class Device():
         self.config=config
         self.dev_ht=dev_ht
         self.poll_speed=config.get("poll_speed",5000)
-        self.debounce_delay=100
+        self.debounce_delay=500
         self.next_callback=ticks_ms()+self.debounce_delay
         self.suspended=False
         self.actions=self.config.get("actions",[])
@@ -39,7 +39,7 @@ class Device():
     def callback(self,pin):
 
         logger.debug(f"Callback {self}")
-        if ticks_ms()>self.next_callback or self.__class__.__name__!="UltraSonic":
+        if ticks_ms()>self.next_callback and self.__class__.__name__!="UltraSonic":
             self.next_callback=ticks_ms()+self.debounce_delay
             for action in self.actions:                
                 logger.debug(f"Execute {action}")
@@ -51,12 +51,16 @@ class Device():
                         logger.debug("Condition not fulfilled")
                         return
                 logger.info(f"Callback from {self.name}")
-                if action["target"]==self.name:
+                if "target" in action and action["target"]==self.name:
                     logger.error(f"Circular reference in action {action}")
                     continue
                 
-                if action["target"] not in self.dev_ht:
-                    logger.error(f"Unknown target {action['target']}")
+                if "target" not in action or action["target"] not in self.dev_ht:
+                    if "target" in action:
+                        logger.error(f"Unknown target {action['target']}")
+                    else:                        
+                        logger.error(f"No Target")
+                        return
 
                 if action["type"]=="toggle":
                     self.dev_ht[action["target"]].toggle()
@@ -66,6 +70,8 @@ class Device():
                     self.dev_ht[action["target"]].set_value(0)
                 elif action["type"]=="trigger":
                     self.dev_ht[action["target"]].trigger()
+                elif action["type"]=="call":                    
+                    self.dev_ht[action["target"]].call(self)                    
                 elif action["type"]=="suspend":
                     self.dev_ht[action["target"]].suspended=True
                 elif action["type"]=="unsuspend":

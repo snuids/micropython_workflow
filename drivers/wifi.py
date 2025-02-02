@@ -20,12 +20,16 @@ def initialize_wifi(ssid, password):
     # Wait for Wi-Fi connection
     connection_timeout = 10
     while connection_timeout > 0:
+        status=wlan.status()
+        logger.info(f"WIFI Status <{status}>")
         if wlan.status() >= 3:
             return True
-            break
+            
         connection_timeout -= 1
-        print('Waiting for Wi-Fi connection...')
+        logger.info('Waiting for Wi-Fi connection...')
         sleep(1)
+    logger.error('No connection...')
+    
     return False
 
 def connect_mqtt(client_id,host,port,user,password):
